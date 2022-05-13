@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+
+  nginx:
+    build:
+        context: ./nginx
+    container_name: nginx
+    depends_on:
+        - tomcat
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+
+  tomcat:
+    build:
+        context: ./tomcat
+    container_name: tomcat
+    hostname: tomcat
+    restart: on-failure
+
+  mysql:
+    image: mysql:8.0.29
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+    volumes:
+     - db_data:/var/lib/mysql
+
+
+volumes:
+  db_data: {}
